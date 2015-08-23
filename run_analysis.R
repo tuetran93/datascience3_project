@@ -68,14 +68,10 @@ clean_name <- function(df) {
 ## Call clean_name on mean_std.
 names(mean_std) <- clean_name(mean_std)
 
-## Combine the person_id and activity in mean_std into one combined_id column. 
-## Then, create a new data set, mean_std_1, that removes person_id and activity.
-mean_std <- mutate(mean_std, combined_id = paste(person_id, activity, sep = ""))
-mean_std_1 <- mean_std[, c(length(mean_std), 3:length(mean_std))]
-
-## Group mean_std_1 by the combined_id column, then summarise_each to calculate
-## the mean of each column ==> STEP 5
-mean_std_1 <- group_by(mean_std_1, combined_id)
+## Group mean_std by person_id and activity, and assign the result to a new
+## dataset, mean_std_1. Call summarise_each on mean_std_1 to get the mean
+## of each column for each subject and each activity ==> STEP 5
+mean_std_1 <- group_by(mean_std, person_id, activity)
 mean_std_1 <- summarise_each(mean_std_1, funs(mean))
 
 mean_std_1
